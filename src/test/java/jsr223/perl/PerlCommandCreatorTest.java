@@ -70,9 +70,7 @@ public class PerlCommandCreatorTest {
         index = checkSudoAndComposeCommand(command, index);
 
         // Check if file argument is used
-        Assert.assertEquals("File option must be used.",
-                            PerlCommandCreator.FILENAME_ARGUMENT,
-                            command[index++]);
+        Assert.assertEquals("File option must be used.", PerlCommandCreator.FILENAME_ARGUMENT, command[index++]);
 
         // Check if correct filename is used
         Assert.assertEquals("Correct filename must be used in command.",

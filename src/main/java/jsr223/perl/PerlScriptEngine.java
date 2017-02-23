@@ -70,8 +70,7 @@ public class PerlScriptEngine extends AbstractScriptEngine {
         String[] perlCommand = perlCommandCreator.createPerlExecutionCommand();
 
         // Create a process builder
-        ProcessBuilder processBuilder = SingletonProcessBuilderFactory.getInstance()
-                                                                      .getProcessBuilder(perlCommand);
+        ProcessBuilder processBuilder = SingletonProcessBuilderFactory.getInstance().getProcessBuilder(perlCommand);
 
         // Use process builder environment and fill it with environment variables
         Map<String, String> variablesMap = processBuilder.environment();
@@ -86,7 +85,7 @@ public class PerlScriptEngine extends AbstractScriptEngine {
 
         try {
             perlFile = configurationFileWriter.forceFileToDisk(scriptReplacedVariables,
-                                                                      perlCommandCreator.YAML_FILE_NAME);
+                                                               perlCommandCreator.YAML_FILE_NAME);
 
             // Start process
             Process process = processBuilder.start();

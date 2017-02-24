@@ -85,7 +85,7 @@ public class PerlScriptEngine extends AbstractScriptEngine {
 
         try {
             perlFile = configurationFileWriter.forceFileToDisk(scriptReplacedVariables,
-                                                               perlCommandCreator.YAML_FILE_NAME);
+                                                               perlCommandCreator.PERL_FILE_NAME);
 
             // Start process
             Process process = processBuilder.start();

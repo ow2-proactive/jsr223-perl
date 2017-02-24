@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
 public class PerlCommandCreator {
 
     // Constants
-    public static final String YAML_FILE_NAME = "file.pl";
+    public static final String PERL_FILE_NAME = "file.pl";
 
     public static final String FILENAME_ARGUMENT = "-e";
 
@@ -54,7 +54,7 @@ public class PerlCommandCreator {
         command.add(FILENAME_ARGUMENT);
 
         // Add filename
-        command.add(YAML_FILE_NAME);
+        command.add(PERL_FILE_NAME);
 
         return command.toArray(new String[command.size()]);
     }

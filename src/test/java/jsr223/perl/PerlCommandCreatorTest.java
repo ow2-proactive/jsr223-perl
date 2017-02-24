@@ -74,7 +74,7 @@ public class PerlCommandCreatorTest {
 
         // Check if correct filename is used
         Assert.assertEquals("Correct filename must be used in command.",
-                            PerlCommandCreator.YAML_FILE_NAME,
+                            PerlCommandCreator.PERL_FILE_NAME,
                             command[index++]);
     }
 

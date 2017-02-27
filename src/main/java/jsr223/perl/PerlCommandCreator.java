@@ -38,8 +38,6 @@ public class PerlCommandCreator {
     // Constants
     public static final String PERL_FILE_NAME = "file.pl";
 
-    public static final String FILENAME_ARGUMENT = "-e";
-
     /**
      * This method creates a bash command which executes perl with a given perl file.
      *
@@ -49,9 +47,6 @@ public class PerlCommandCreator {
     public String[] createPerlExecutionCommand() {
         List<String> command = new ArrayList<>();
         addSudoAndPerlCommand(command);
-
-        // Add filename argument
-        command.add(FILENAME_ARGUMENT);
 
         // Add filename
         command.add(PERL_FILE_NAME);

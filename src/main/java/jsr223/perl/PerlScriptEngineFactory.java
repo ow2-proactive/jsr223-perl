@@ -52,10 +52,6 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     private static PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilities);
 
-    //    public static void main(String[] args) {
-    //        System.out.println("Test:" + perlVersionGetter.getPerlVersion(SingletonProcessBuilderFactory.getInstance()));
-    //    }
-
     public PerlScriptEngineFactory() {
         parameters.put(ScriptEngine.NAME, NAME);
         parameters.put(ScriptEngine.ENGINE_VERSION, ENGINE_VERSION);

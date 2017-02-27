@@ -59,7 +59,7 @@ public class PerlPropertyLoader {
         }
 
         // Get property, specify default value
-        this.perlCommand = properties.getProperty("perl.command", "C:\\Perl64\\bin\\wperl.exe");
+        this.perlCommand = properties.getProperty("perl.command", "C:\\Perl64\\bin\\wperl.exe"); // for Windows
         // Get property, specify default value
         this.sudoCommand = properties.getProperty("perl.sudo.command", "/usr/bin/sudo");
         // Get property, specify default value

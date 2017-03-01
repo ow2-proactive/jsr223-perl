@@ -96,7 +96,7 @@ jar {
 // files modified in the current pull request.
 sonarqube {
     properties {
-        property "sonar.projectName", "jsr223-docker-compose"
+        property "sonar.projectName", "jsr223-perl"
         property "sonar.host.url", "http://master.ci.activeeon.com:9000"
         property "sonar.jdbc.url", "jdbc:postgresql://master.ci.activeeon.com:5432/sonar"
         property "sonar.projectVersion", version

@@ -46,6 +46,8 @@ import processbuilder.utils.ProcessBuilderUtilities;
 @Log4j
 public class PerlScriptEngine extends AbstractScriptEngine {
 
+    public static final String EXIT_VALUE_BINDING_NAME = "EXIT_VALUE";
+
     private ProcessBuilderUtilities processBuilderUtilities = new ProcessBuilderUtilities();
 
     private VariablesReplacer variablesReplacer = new VariablesReplacer();
@@ -97,7 +99,12 @@ public class PerlScriptEngine extends AbstractScriptEngine {
                                                            context.getReader());
 
             // Wait for process to exit
-            return process.waitFor();
+            int exitValue = process.waitFor();
+            context.getBindings(ScriptContext.ENGINE_SCOPE).put(EXIT_VALUE_BINDING_NAME, exitValue);
+            if (exitValue != 0) {
+                throw new ScriptException("Perl process execution has failed with exit code " + exitValue);
+            }
+            return exitValue;
         } catch (IOException e) {
             log.warn("Failed to execute Perl.", e);
         } catch (InterruptedException e) {

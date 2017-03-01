@@ -28,22 +28,22 @@ package processbuilder;
 /**
  * Created on 4/21/2015.
  */
-public class SingletonProcessBuilderFactory implements ProcessBuilderFactory {
+public class PerlSingletonPerlProcessBuilderFactory implements PerlProcessBuilderFactory {
 
-    private SingletonProcessBuilderFactory() {
+    private PerlSingletonPerlProcessBuilderFactory() {
     }
 
     /**
-     *  Initializes ProcessBuilderFactory.
+     *  Initializes PerlProcessBuilderFactory.
      *
-     * ProcessBuilderFactoryHolder is loaded on the first execution of ProcessBuilderFactory.getInstance()
+     * ProcessBuilderFactoryHolder is loaded on the first execution of PerlProcessBuilderFactory.getInstance()
      * or the first access to ProcessBuilderFactoryHolder.INSTANCE, not before.
      */
     private static class ProcessBuilderFactoryHolder {
-        private static final SingletonProcessBuilderFactory INSTANCE = new SingletonProcessBuilderFactory();
+        private static final PerlSingletonPerlProcessBuilderFactory INSTANCE = new PerlSingletonPerlProcessBuilderFactory();
     }
 
-    public static ProcessBuilderFactory getInstance() {
+    public static PerlProcessBuilderFactory getInstance() {
         return ProcessBuilderFactoryHolder.INSTANCE;
     }
 

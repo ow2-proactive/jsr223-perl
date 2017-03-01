@@ -40,16 +40,16 @@ import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.Matchers;
 
-import processbuilder.ProcessBuilderFactory;
-import processbuilder.utils.ProcessBuilderUtilities;
+import processbuilder.PerlProcessBuilderFactory;
+import processbuilder.utils.PerlProcessBuilderUtilities;
 
 
 public class PerlVersionGetterTest {
 
     @Test
     public void getPerlVersionCallsProcessBuilderFactory() throws Exception {
-        ProcessBuilderFactory factory = mock(ProcessBuilderFactory.class);
-        ProcessBuilderUtilities processBuilderUtilitiesMock = spy(ProcessBuilderUtilities.class);
+        PerlProcessBuilderFactory factory = mock(PerlProcessBuilderFactory.class);
+        PerlProcessBuilderUtilities processBuilderUtilitiesMock = spy(PerlProcessBuilderUtilities.class);
 
         when(factory.getProcessBuilder(Matchers.<String[]> anyVararg())).thenReturn(new ProcessBuilder(""));
 
@@ -61,8 +61,8 @@ public class PerlVersionGetterTest {
 
     @Test
     public void getPerlVersionInvalidCommandReturnsEmptyString() throws Exception {
-        ProcessBuilderFactory factory = mock(ProcessBuilderFactory.class);
-        ProcessBuilderUtilities processBuilderUtilitiesMock = spy(ProcessBuilderUtilities.class);
+        PerlProcessBuilderFactory factory = mock(PerlProcessBuilderFactory.class);
+        PerlProcessBuilderUtilities processBuilderUtilitiesMock = spy(PerlProcessBuilderUtilities.class);
 
         when(factory.getProcessBuilder(Matchers.<String[]> anyVararg())).thenReturn(new ProcessBuilder("...."));
 
@@ -75,8 +75,8 @@ public class PerlVersionGetterTest {
     public void getPerlVersionCallsProcessBuilderUtilitiesWindows() throws Exception {
         Assume.assumeTrue(System.getProperty("os.name").toLowerCase().startsWith("win"));
 
-        ProcessBuilderFactory factoryMock = mock(ProcessBuilderFactory.class);
-        ProcessBuilderUtilities processBuilderUtilitiesMock = spy(ProcessBuilderUtilities.class);
+        PerlProcessBuilderFactory factoryMock = mock(PerlProcessBuilderFactory.class);
+        PerlProcessBuilderUtilities processBuilderUtilitiesMock = spy(PerlProcessBuilderUtilities.class);
 
         when(factoryMock.getProcessBuilder(Matchers.<String[]> anyVararg())).thenReturn(new ProcessBuilder("cmd",
                                                                                                            "/C",
@@ -96,8 +96,8 @@ public class PerlVersionGetterTest {
     public void getPerlVersionCallsProcessBuilderUtilitiesLinux() throws Exception {
         Assume.assumeTrue(System.getProperty("os.name").toLowerCase().startsWith("lin"));
 
-        ProcessBuilderFactory factoryMock = mock(ProcessBuilderFactory.class);
-        ProcessBuilderUtilities processBuilderUtilitiesMock = spy(ProcessBuilderUtilities.class);
+        PerlProcessBuilderFactory factoryMock = mock(PerlProcessBuilderFactory.class);
+        PerlProcessBuilderUtilities processBuilderUtilitiesMock = spy(PerlProcessBuilderUtilities.class);
 
         when(factoryMock.getProcessBuilder(Matchers.<String[]> anyVararg())).thenReturn(new ProcessBuilder("ls"));
 
@@ -112,7 +112,7 @@ public class PerlVersionGetterTest {
 
     @Test
     public void getPerlVersionNullFactoryReturnsEmptyString() throws Exception {
-        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(new ProcessBuilderUtilities());
+        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(new PerlProcessBuilderUtilities());
 
         assertThat(perlVersionGetter.getPerlVersion(null), is(""));
     }

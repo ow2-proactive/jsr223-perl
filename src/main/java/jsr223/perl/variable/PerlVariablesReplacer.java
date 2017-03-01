@@ -28,7 +28,7 @@ package jsr223.perl.variable;
 import java.util.Map;
 
 
-public class VariablesReplacer {
+public class PerlVariablesReplacer {
 
     /**
      * Replaces all varialbes with look like $[VariableName]. With matching variables in the

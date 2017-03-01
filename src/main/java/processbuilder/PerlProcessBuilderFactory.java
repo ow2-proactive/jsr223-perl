@@ -25,6 +25,6 @@
  */
 package processbuilder;
 
-public interface ProcessBuilderFactory {
+public interface PerlProcessBuilderFactory {
     ProcessBuilder getProcessBuilder(String... command);
 }

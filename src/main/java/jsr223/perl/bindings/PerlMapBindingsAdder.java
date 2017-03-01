@@ -31,7 +31,7 @@ import lombok.extern.log4j.Log4j;
 
 
 @Log4j
-public class MapBindingsAdder {
+public class PerlMapBindingsAdder {
 
     /**
      * @param environment Add strings to environment. Method returns immediately if null.

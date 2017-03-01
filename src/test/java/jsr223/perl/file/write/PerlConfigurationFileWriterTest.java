@@ -36,7 +36,7 @@ import java.nio.file.Paths;
 import org.junit.Test;
 
 
-public class ConfigurationFileWriterTest {
+public class PerlConfigurationFileWriterTest {
 
     private final String fileContent = "Test File content";
 
@@ -44,9 +44,9 @@ public class ConfigurationFileWriterTest {
 
     @Test
     public void testComposeFileIsWrittenToDisk() throws IOException {
-        ConfigurationFileWriter configurationFileWriter = new ConfigurationFileWriter();
+        PerlConfigurationFileWriter perlConfigurationFileWriter = new PerlConfigurationFileWriter();
 
-        File fileOnDisk = configurationFileWriter.forceFileToDisk(fileContent, fileName);
+        File fileOnDisk = perlConfigurationFileWriter.forceFileToDisk(fileContent, fileName);
         fileOnDisk.deleteOnExit();
 
         assertThat(new File(fileOnDisk.getAbsolutePath()).exists(), is(true));
@@ -55,11 +55,11 @@ public class ConfigurationFileWriterTest {
 
     @Test
     public void testComposeFileIsOverwritten() throws IOException {
-        ConfigurationFileWriter configurationFileWriter = new ConfigurationFileWriter();
+        PerlConfigurationFileWriter perlConfigurationFileWriter = new PerlConfigurationFileWriter();
 
         // Create file with same name -- must be overwritten
         new File(fileName).createNewFile();
-        File fileOnDisk = configurationFileWriter.forceFileToDisk(fileContent, fileName);
+        File fileOnDisk = perlConfigurationFileWriter.forceFileToDisk(fileContent, fileName);
         fileOnDisk.deleteOnExit();
 
         assertThat(new File(fileOnDisk.getAbsolutePath()).exists(), is(true));

@@ -36,10 +36,10 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @AllArgsConstructor
-public class StringBindingsAdder {
+public class PerlStringBindingsAdder {
 
     @NonNull
-    private MapBindingsAdder mapBindingsAdder;
+    private PerlMapBindingsAdder perlMapBindingsAdder;
 
     /**
      * Adds all bindings which are from type @String to the environment map. All other bindings are printed
@@ -59,7 +59,7 @@ public class StringBindingsAdder {
             if (hasKeyAndValue(entry) && entry.getValue() instanceof String) {
                 addEntryToEnvironmentWhichIsAPureString(environment, entry);
             } else { // Go through maps and add String values to the environment map.
-                mapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(environment, entry);
+                perlMapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(environment, entry);
             }
         }
     }

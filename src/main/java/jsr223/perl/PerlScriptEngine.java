@@ -33,14 +33,14 @@ import java.util.Map;
 
 import javax.script.*;
 
-import jsr223.perl.bindings.MapBindingsAdder;
-import jsr223.perl.bindings.StringBindingsAdder;
-import jsr223.perl.file.write.ConfigurationFileWriter;
-import jsr223.perl.utils.Log4jConfigurationLoader;
-import jsr223.perl.variable.VariablesReplacer;
+import jsr223.perl.bindings.PerlMapBindingsAdder;
+import jsr223.perl.bindings.PerlStringBindingsAdder;
+import jsr223.perl.file.write.PerlConfigurationFileWriter;
+import jsr223.perl.utils.PerlLog4jConfigurationLoader;
+import jsr223.perl.variable.PerlVariablesReplacer;
 import lombok.extern.log4j.Log4j;
-import processbuilder.SingletonProcessBuilderFactory;
-import processbuilder.utils.ProcessBuilderUtilities;
+import processbuilder.PerlSingletonPerlProcessBuilderFactory;
+import processbuilder.utils.PerlProcessBuilderUtilities;
 
 
 @Log4j
@@ -48,21 +48,21 @@ public class PerlScriptEngine extends AbstractScriptEngine {
 
     public static final String EXIT_VALUE_BINDING_NAME = "EXIT_VALUE";
 
-    private ProcessBuilderUtilities processBuilderUtilities = new ProcessBuilderUtilities();
+    private PerlProcessBuilderUtilities processBuilderUtilities = new PerlProcessBuilderUtilities();
 
-    private VariablesReplacer variablesReplacer = new VariablesReplacer();
+    private PerlVariablesReplacer perlVariablesReplacer = new PerlVariablesReplacer();
 
-    private ConfigurationFileWriter configurationFileWriter = new ConfigurationFileWriter();
+    private PerlConfigurationFileWriter perlConfigurationFileWriter = new PerlConfigurationFileWriter();
 
-    private StringBindingsAdder stringBindingsAdder = new StringBindingsAdder(new MapBindingsAdder());
+    private PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder(new PerlMapBindingsAdder());
 
     private PerlCommandCreator perlCommandCreator = new PerlCommandCreator();
 
-    private Log4jConfigurationLoader log4jConfigurationLoader = new Log4jConfigurationLoader();
+    private PerlLog4jConfigurationLoader perlLog4JConfigurationLoader = new PerlLog4jConfigurationLoader();
 
     public PerlScriptEngine() {
         // This is the entry-point of the script engine
-        log4jConfigurationLoader.loadLog4jConfiguration();
+        perlLog4JConfigurationLoader.loadLog4jConfiguration();
     }
 
     @Override
@@ -72,22 +72,23 @@ public class PerlScriptEngine extends AbstractScriptEngine {
         String[] perlCommand = perlCommandCreator.createPerlExecutionCommand();
 
         // Create a process builder
-        ProcessBuilder processBuilder = SingletonProcessBuilderFactory.getInstance().getProcessBuilder(perlCommand);
+        ProcessBuilder processBuilder = PerlSingletonPerlProcessBuilderFactory.getInstance()
+                                                                              .getProcessBuilder(perlCommand);
 
         // Use process builder environment and fill it with environment variables
         Map<String, String> variablesMap = processBuilder.environment();
 
         // Add string bindings as environment variables
-        stringBindingsAdder.addBindingToStringMap(context.getBindings(ScriptContext.ENGINE_SCOPE), variablesMap);
+        perlStringBindingsAdder.addBindingToStringMap(context.getBindings(ScriptContext.ENGINE_SCOPE), variablesMap);
 
         // Replace variables in configuration file
-        String scriptReplacedVariables = variablesReplacer.replaceVariables(script, variablesMap);
+        String scriptReplacedVariables = perlVariablesReplacer.replaceVariables(script, variablesMap);
 
         File perlFile = null;
 
         try {
-            perlFile = configurationFileWriter.forceFileToDisk(scriptReplacedVariables,
-                                                               perlCommandCreator.PERL_FILE_NAME);
+            perlFile = perlConfigurationFileWriter.forceFileToDisk(scriptReplacedVariables,
+                                                                   perlCommandCreator.PERL_FILE_NAME);
 
             // Start process
             Process process = processBuilder.start();
@@ -129,7 +130,7 @@ public class PerlScriptEngine extends AbstractScriptEngine {
         StringWriter stringWriter = new StringWriter();
 
         try {
-            ProcessBuilderUtilities.pipe(reader, stringWriter);
+            PerlProcessBuilderUtilities.pipe(reader, stringWriter);
         } catch (IOException e) {
             log.warn("Filed to convert Reader into StringWriter. Not possible to execute Perl script.");
             log.debug("Filed to convert Reader into StringWriter. Not possible to execute Perl script.", e);

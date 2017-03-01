@@ -38,7 +38,7 @@ import javax.script.ScriptException;
 import org.junit.Test;
 
 
-public class VariablesReplacerTest {
+public class PerlVariablesReplacerTest {
 
     private final static String perlFileWithVariables = "$name:\n" + "    image: $key\n" +
                                                         "    command: echo \"$greetings\"";
@@ -48,13 +48,13 @@ public class VariablesReplacerTest {
 
     @Test
     public void testVariableSubstitution() throws ScriptException, IOException {
-        VariablesReplacer variablesReplacer = new VariablesReplacer();
+        PerlVariablesReplacer perlVariablesReplacer = new PerlVariablesReplacer();
         Map<String, String> variableMap = new HashMap<>();
         variableMap.put("name", "EchoUbuntu");
         variableMap.put("key", "value");
         variableMap.put("greetings", "Hello World");
 
-        String stringVariablesReplaced = variablesReplacer.replaceVariables(perlFileWithVariables, variableMap);
+        String stringVariablesReplaced = perlVariablesReplacer.replaceVariables(perlFileWithVariables, variableMap);
 
         assertThat(stringVariablesReplaced, is(perlFileExpected));
 
@@ -62,44 +62,44 @@ public class VariablesReplacerTest {
 
     @Test
     public void testScriptIsNull() throws ScriptException, IOException {
-        VariablesReplacer variablesReplacer = new VariablesReplacer();
+        PerlVariablesReplacer perlVariablesReplacer = new PerlVariablesReplacer();
         Map<String, String> variableMap = new HashMap<>();
         variableMap.put("name", "EchoUbuntu");
         variableMap.put("key", "value");
         variableMap.put("greetings", "Hello World");
 
-        String stringVariablesReplaced = variablesReplacer.replaceVariables(null, variableMap);
+        String stringVariablesReplaced = perlVariablesReplacer.replaceVariables(null, variableMap);
 
         assertThat(stringVariablesReplaced == null, is(true));
     }
 
     @Test
     public void testVariablesIsNull() throws ScriptException, IOException {
-        VariablesReplacer variablesReplacer = new VariablesReplacer();
+        PerlVariablesReplacer perlVariablesReplacer = new PerlVariablesReplacer();
 
-        String stringVariablesReplaced = variablesReplacer.replaceVariables(perlFileWithVariables, null);
+        String stringVariablesReplaced = perlVariablesReplacer.replaceVariables(perlFileWithVariables, null);
 
         assertThat(stringVariablesReplaced, is(perlFileWithVariables));
     }
 
     @Test
     public void testScriptAndVariablesIsNull() throws ScriptException, IOException {
-        VariablesReplacer variablesReplacer = new VariablesReplacer();
+        PerlVariablesReplacer perlVariablesReplacer = new PerlVariablesReplacer();
 
-        String stringVariablesReplaced = variablesReplacer.replaceVariables(null, null);
+        String stringVariablesReplaced = perlVariablesReplacer.replaceVariables(null, null);
 
         assertThat(stringVariablesReplaced == null, is(true));
     }
 
     @Test
     public void testKeyIsNull() throws ScriptException, IOException {
-        VariablesReplacer variablesReplacer = new VariablesReplacer();
+        PerlVariablesReplacer perlVariablesReplacer = new PerlVariablesReplacer();
         Map<String, String> variableMap = new HashMap<>();
         variableMap.put(null, "EchoUbuntu");
         variableMap.put("key", "value");
         variableMap.put("greetings", "Hello World");
 
-        String stringVariablesReplaced = variablesReplacer.replaceVariables(perlFileWithVariables, variableMap);
+        String stringVariablesReplaced = perlVariablesReplacer.replaceVariables(perlFileWithVariables, variableMap);
 
         // Name will not be replaced
         assertThat(stringVariablesReplaced, containsString("$name:"));
@@ -107,13 +107,13 @@ public class VariablesReplacerTest {
 
     @Test
     public void testValueIsNull() throws ScriptException, IOException {
-        VariablesReplacer variablesReplacer = new VariablesReplacer();
+        PerlVariablesReplacer perlVariablesReplacer = new PerlVariablesReplacer();
         Map<String, String> variableMap = new HashMap<>();
         variableMap.put("name", null);
         variableMap.put("key", "value");
         variableMap.put("greetings", "Hello World");
 
-        String stringVariablesReplaced = variablesReplacer.replaceVariables(perlFileWithVariables, variableMap);
+        String stringVariablesReplaced = perlVariablesReplacer.replaceVariables(perlFileWithVariables, variableMap);
 
         // Name will not be replaced
         assertThat(stringVariablesReplaced, containsString("$name:"));

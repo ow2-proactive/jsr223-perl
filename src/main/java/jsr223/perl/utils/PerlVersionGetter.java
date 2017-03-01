@@ -31,8 +31,8 @@ import java.io.StringWriter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import processbuilder.ProcessBuilderFactory;
-import processbuilder.utils.ProcessBuilderUtilities;
+import processbuilder.PerlProcessBuilderFactory;
+import processbuilder.utils.PerlProcessBuilderUtilities;
 
 
 @Log4j
@@ -40,7 +40,7 @@ import processbuilder.utils.ProcessBuilderUtilities;
 public class PerlVersionGetter {
 
     @NonNull
-    private ProcessBuilderUtilities processBuilderUtilities;
+    private PerlProcessBuilderUtilities processBuilderUtilities;
 
     /**
      * Retrieves the Perl version.
@@ -48,7 +48,7 @@ public class PerlVersionGetter {
      * @return The currently installed version return by the perl command or an empty string
      * the version could not be determined.
      */
-    public String getPerlVersion(ProcessBuilderFactory factory) {
+    public String getPerlVersion(PerlProcessBuilderFactory factory) {
         if (factory == null) {
             return "";
         }

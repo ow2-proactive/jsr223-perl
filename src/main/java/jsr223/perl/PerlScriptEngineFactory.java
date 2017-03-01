@@ -31,8 +31,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
 import jsr223.perl.utils.PerlVersionGetter;
-import processbuilder.SingletonProcessBuilderFactory;
-import processbuilder.utils.ProcessBuilderUtilities;
+import processbuilder.PerlSingletonPerlProcessBuilderFactory;
+import processbuilder.utils.PerlProcessBuilderUtilities;
 
 
 public class PerlScriptEngineFactory implements ScriptEngineFactory {
@@ -48,7 +48,7 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     private final Map<String, Object> parameters = new HashMap<>();
 
-    private static ProcessBuilderUtilities processBuilderUtilities = new ProcessBuilderUtilities();
+    private static PerlProcessBuilderUtilities processBuilderUtilities = new PerlProcessBuilderUtilities();
 
     private static PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilities);
 
@@ -59,7 +59,7 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
         parameters.put(ScriptEngine.ENGINE, ENGINE);
     }
 
-    public PerlScriptEngineFactory(ProcessBuilderUtilities processBuilderUtilities,
+    public PerlScriptEngineFactory(PerlProcessBuilderUtilities processBuilderUtilities,
             PerlVersionGetter perlVersionGetter) {
         this();
         if (processBuilderUtilities == null || perlVersionGetter == null) {
@@ -102,7 +102,7 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     @Override
     public String getLanguageVersion() {
-        return perlVersionGetter.getPerlVersion(SingletonProcessBuilderFactory.getInstance());
+        return perlVersionGetter.getPerlVersion(PerlSingletonPerlProcessBuilderFactory.getInstance());
     }
 
     @Override

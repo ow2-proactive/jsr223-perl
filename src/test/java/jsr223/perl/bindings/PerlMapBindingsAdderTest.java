@@ -38,11 +38,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-public class MapBindingsAdderTest {
+public class PerlMapBindingsAdderTest {
 
     @Test
     public void testAddEntryToEnvironmentOtherThanPureStringsDoesntThrowNullpointer() throws Exception {
-        MapBindingsAdder mapBindingsAdder = new MapBindingsAdder();
+        PerlMapBindingsAdder perlMapBindingsAdder = new PerlMapBindingsAdder();
         Map<String, String> environment = new HashMap<>();
 
         // Construct Map which contains null values
@@ -52,7 +52,7 @@ public class MapBindingsAdderTest {
 
         // Iterate through the null values and pass them to the add method.
         for (Map.Entry<String, Object> entry : nullValues.entrySet()) {
-            mapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(environment, entry);
+            perlMapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(environment, entry);
         }
 
         // Nothing added so the size will be 0
@@ -61,7 +61,7 @@ public class MapBindingsAdderTest {
 
     @Test
     public void testSkipsIfEnvironmentIsNull() throws Exception {
-        MapBindingsAdder mapBindingsAdder = new MapBindingsAdder();
+        PerlMapBindingsAdder perlMapBindingsAdder = new PerlMapBindingsAdder();
 
         Map<String, Object> variableMap = new HashMap<>();
         variableMap.put("name", null);
@@ -70,16 +70,16 @@ public class MapBindingsAdderTest {
 
         // Iterate through the null values and pass them to the add method.
         for (Map.Entry<String, Object> entry : variableMap.entrySet()) {
-            mapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(null, entry);
+            perlMapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(null, entry);
         }
     }
 
     @Test
     public void testSkipsIfEntryIsNull() throws Exception {
-        MapBindingsAdder mapBindingsAdder = new MapBindingsAdder();
+        PerlMapBindingsAdder perlMapBindingsAdder = new PerlMapBindingsAdder();
         Map<String, String> environment = new HashMap<>();
 
-        mapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(environment, null);
+        perlMapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(environment, null);
 
         // Nothing added so the size will be 0
         Assert.assertEquals(environment.size(), 0);
@@ -87,7 +87,7 @@ public class MapBindingsAdderTest {
 
     @Test
     public void testMapInsideMap() throws ScriptException, IOException {
-        MapBindingsAdder mapBindingsAdder = new MapBindingsAdder();
+        PerlMapBindingsAdder perlMapBindingsAdder = new PerlMapBindingsAdder();
         Map<String, String> environment = new HashMap<>();
         Map<String, String> variableMap = new HashMap<>();
         Map<String, Object> outsideMap = new HashMap<>();
@@ -98,7 +98,7 @@ public class MapBindingsAdderTest {
 
         // Add map which contains map
         for (Map.Entry<String, Object> entry : outsideMap.entrySet()) {
-            mapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(environment, entry);
+            perlMapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(environment, entry);
         }
 
         assertThat(environment, hasEntry("key", "value"));

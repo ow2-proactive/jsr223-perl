@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j;
 
 @NoArgsConstructor
 @Log4j
-public class ProcessBuilderUtilities {
+public class PerlProcessBuilderUtilities {
 
     /**
      * Creates a thread which will constantly pipe data, only active when new data is available, from a source to an attached sink. After

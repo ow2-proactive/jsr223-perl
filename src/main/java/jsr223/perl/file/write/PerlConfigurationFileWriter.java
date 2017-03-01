@@ -32,7 +32,7 @@ import java.io.Writer;
 import java.nio.file.FileAlreadyExistsException;
 
 
-public class ConfigurationFileWriter {
+public class PerlConfigurationFileWriter {
 
     public File forceFileToDisk(String fileContent, String filenameAndPath) throws IOException {
         File composeYamlFile = new File(filenameAndPath);

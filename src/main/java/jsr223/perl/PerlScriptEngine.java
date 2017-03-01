@@ -28,12 +28,17 @@ package jsr223.perl;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.Map;
 
-import javax.script.*;
+import javax.script.AbstractScriptEngine;
+import javax.script.Bindings;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 
-import jsr223.perl.bindings.PerlMapBindingsAdder;
 import jsr223.perl.bindings.PerlStringBindingsAdder;
 import jsr223.perl.file.write.PerlConfigurationFileWriter;
 import jsr223.perl.utils.PerlLog4jConfigurationLoader;
@@ -48,13 +53,15 @@ public class PerlScriptEngine extends AbstractScriptEngine {
 
     public static final String EXIT_VALUE_BINDING_NAME = "EXIT_VALUE";
 
+    public static final String VARIABLES_BINDING_NAME = "variables";
+
     private PerlProcessBuilderUtilities processBuilderUtilities = new PerlProcessBuilderUtilities();
 
     private PerlVariablesReplacer perlVariablesReplacer = new PerlVariablesReplacer();
 
     private PerlConfigurationFileWriter perlConfigurationFileWriter = new PerlConfigurationFileWriter();
 
-    private PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder(new PerlMapBindingsAdder());
+    private PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder();
 
     private PerlCommandCreator perlCommandCreator = new PerlCommandCreator();
 
@@ -101,6 +108,11 @@ public class PerlScriptEngine extends AbstractScriptEngine {
 
             // Wait for process to exit
             int exitValue = process.waitFor();
+            if (context.getBindings(ScriptContext.ENGINE_SCOPE).containsKey(VARIABLES_BINDING_NAME)) {
+                Map<String, Serializable> variables = (Map<String, Serializable>) context.getBindings(ScriptContext.ENGINE_SCOPE)
+                                                                                         .get(VARIABLES_BINDING_NAME);
+                variables.put(EXIT_VALUE_BINDING_NAME, exitValue);
+            }
             context.getBindings(ScriptContext.ENGINE_SCOPE).put(EXIT_VALUE_BINDING_NAME, exitValue);
             if (exitValue != 0) {
                 throw new ScriptException("Perl process execution has failed with exit code " + exitValue);

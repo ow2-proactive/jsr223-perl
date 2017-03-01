@@ -25,21 +25,18 @@
  */
 package jsr223.perl.bindings;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.script.Bindings;
 
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 
 @Log4j
-@AllArgsConstructor
+@NoArgsConstructor
 public class PerlStringBindingsAdder {
-
-    @NonNull
-    private PerlMapBindingsAdder perlMapBindingsAdder;
 
     /**
      * Adds all bindings which are from type @String to the environment map. All other bindings are printed
@@ -55,28 +52,46 @@ public class PerlStringBindingsAdder {
             return;
         }
 
-        for (Map.Entry<String, Object> entry : bindings.entrySet()) {
-            if (hasKeyAndValue(entry) && entry.getValue() instanceof String) {
-                addEntryToEnvironmentWhichIsAPureString(environment, entry);
-            } else { // Go through maps and add String values to the environment map.
-                perlMapBindingsAdder.addEntryToEnvironmentOtherThanPureStrings(environment, entry);
+        for (Map.Entry<String, Object> binding : bindings.entrySet()) {
+            String bindingKey = binding.getKey();
+            Object bindingValue = binding.getValue();
+
+            if (bindingValue instanceof Object[]) {
+                addArrayBindingAsEnvironmentVariable(bindingKey, (Object[]) bindingValue, environment);
+            } else if (bindingValue instanceof Collection) {
+                addCollectionBindingAsEnvironmentVariable(bindingKey, (Collection) bindingValue, environment);
+            } else if (bindingValue instanceof Map) {
+                addMapBindingAsEnvironmentVariable(bindingKey, (Map<?, ?>) bindingValue, environment);
+            } else {
+                log.warn("Ignored binding: " + bindingKey + ":" + binding.getValue() + ")");
+                environment.put(bindingKey, toEmptyStringIfNull(binding.getValue()));
             }
         }
     }
 
-    private void addEntryToEnvironmentWhichIsAPureString(Map<String, String> environment,
-            Map.Entry<String, Object> entry) {
-        if (environmentAndEntryExist(environment, entry) && hasKeyAndValue(entry)) {
-            environment.put(entry.getKey(), (String) entry.getValue());
-            log.debug("Added binding: " + entry.getKey() + ":" + entry.getValue().toString());
+    private void addMapBindingAsEnvironmentVariable(String bindingKey, Map<?, ?> bindingValue,
+            Map<String, String> environment) {
+        for (Map.Entry<?, ?> entry : ((Map<?, ?>) bindingValue).entrySet()) {
+            environment.put(bindingKey + "_" + entry.getKey(),
+                            (entry.getValue() == null ? "" : toEmptyStringIfNull(entry.getValue())));
         }
     }
 
-    private boolean hasKeyAndValue(Map.Entry<String, Object> entry) {
-        return entry.getKey() != null && entry.getValue() != null;
+    private void addCollectionBindingAsEnvironmentVariable(String bindingKey, Collection bindingValue,
+            Map<String, String> environment) {
+        Object[] bindingValueAsArray = bindingValue.toArray();
+        addArrayBindingAsEnvironmentVariable(bindingKey, bindingValueAsArray, environment);
     }
 
-    private boolean environmentAndEntryExist(Map<String, String> environment, Map.Entry<String, Object> entry) {
-        return environment != null && entry != null;
+    private void addArrayBindingAsEnvironmentVariable(String bindingKey, Object[] bindingValue,
+            Map<String, String> environment) {
+        for (int i = 0; i < bindingValue.length; i++) {
+            environment.put(bindingKey + "_" + i,
+                            (bindingValue[i] == null ? "" : toEmptyStringIfNull(bindingValue[i].toString())));
+        }
+    }
+
+    private String toEmptyStringIfNull(Object value) {
+        return value == null ? "" : value.toString();
     }
 }

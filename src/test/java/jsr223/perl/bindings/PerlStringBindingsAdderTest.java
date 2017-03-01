@@ -28,11 +28,6 @@ package jsr223.perl.bindings;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -60,7 +55,7 @@ public class PerlStringBindingsAdderTest {
 
     @Test
     public void testAddStringVariables() throws ScriptException, IOException {
-        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder(new PerlMapBindingsAdder());
+        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder();
 
         Bindings bindings = new SimpleBindings();
         Map<String, String> variables = new HashMap<>();
@@ -77,7 +72,7 @@ public class PerlStringBindingsAdderTest {
 
     @Test(expected = NullPointerException.class)
     public void testKeyIsNull() throws ScriptException, IOException {
-        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder(new PerlMapBindingsAdder());
+        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder();
 
         Bindings bindings = new SimpleBindings();
         Map<String, String> variables = new HashMap<>();
@@ -89,7 +84,7 @@ public class PerlStringBindingsAdderTest {
 
     @Test
     public void testValueIsNull() throws ScriptException, IOException {
-        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder(new PerlMapBindingsAdder());
+        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder();
 
         Bindings bindings = new SimpleBindings();
         Map<String, String> variables = new HashMap<>();
@@ -104,7 +99,7 @@ public class PerlStringBindingsAdderTest {
 
     @Test
     public void testBindingsIsNull() throws ScriptException, IOException {
-        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder(new PerlMapBindingsAdder());
+        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder();
 
         Map<String, String> variables = new HashMap<>();
 
@@ -115,7 +110,7 @@ public class PerlStringBindingsAdderTest {
 
     @Test
     public void testVariablesIsNull() throws ScriptException, IOException {
-        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder(new PerlMapBindingsAdder());
+        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder();
 
         Bindings bindings = new SimpleBindings();
         bindings.put("name", "EchoUbuntu");
@@ -128,34 +123,8 @@ public class PerlStringBindingsAdderTest {
 
     @Test
     public void testVariablesAndBindingsIsNull() throws ScriptException, IOException {
-        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder(new PerlMapBindingsAdder());
+        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder();
 
         perlStringBindingsAdder.addBindingToStringMap(null, null);
     }
-
-    @Test
-    public void testUseObjectBindingsAdderIFObjectIsPassed() throws ScriptException, IOException {
-        PerlMapBindingsAdder perlMapBindingsAdderMock = mock(PerlMapBindingsAdder.class);
-        doNothing().when(perlMapBindingsAdderMock).addEntryToEnvironmentOtherThanPureStrings(any(Map.class),
-                                                                                             any(Map.Entry.class));
-        PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder(perlMapBindingsAdderMock);
-        // Create bindings and variables
-        Map<String, String> variables = new HashMap<>();
-        Bindings bindings = new SimpleBindings();
-
-        // Add objects to bindings
-        bindings.put("int", new Integer(1));
-        bindings.put("float", new Float(1.56));
-        bindings.put("object", new Object());
-        // Add pure strings, on those the object adder should not be called
-        bindings.put("name", "EchoUbuntu");
-        bindings.put("key", "value");
-
-        perlStringBindingsAdder.addBindingToStringMap(bindings, variables);
-
-        // Verify that the object adder was executed three times, for each of the not string objects.
-        verify(perlMapBindingsAdderMock, times(3)).addEntryToEnvironmentOtherThanPureStrings(any(Map.class),
-                                                                                             any(Map.Entry.class));
-    }
-
 }

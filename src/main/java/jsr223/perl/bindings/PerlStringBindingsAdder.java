@@ -63,7 +63,6 @@ public class PerlStringBindingsAdder {
             } else if (bindingValue instanceof Map) {
                 addMapBindingAsEnvironmentVariable(bindingKey, (Map<?, ?>) bindingValue, environment);
             } else {
-                log.warn("Ignored binding: " + bindingKey + ":" + binding.getValue() + ")");
                 environment.put(bindingKey, toEmptyStringIfNull(binding.getValue()));
             }
         }

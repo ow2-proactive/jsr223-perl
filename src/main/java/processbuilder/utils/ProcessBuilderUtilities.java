@@ -51,8 +51,8 @@ public class ProcessBuilderUtilities {
             public void run() {
                 try {
                     pipe(source, attachedSink);
-                } catch (IOException e) {
-                    log.error("Input stream pipe broke: " + e);
+                } catch (IOException ignored) {
+                    //The exception is ignored as for native scripts
                 }
             }
         }.start();

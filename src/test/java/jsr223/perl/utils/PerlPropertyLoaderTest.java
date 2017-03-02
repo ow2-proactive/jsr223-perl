@@ -37,14 +37,4 @@ public class PerlPropertyLoaderTest {
     public void loadPropertiesFromPropertyFilePerlCommand() {
         assertThat(PerlPropertyLoader.getInstance().getPerlCommand(), is("test-perl"));
     }
-
-    @Test
-    public void loadPropertiesFromPropertyFileSudoCommand() {
-        assertThat(PerlPropertyLoader.getInstance().getSudoCommand(), is("test-sudo"));
-    }
-
-    @Test
-    public void loadPropertiesFromPropertyFileUseSudo() {
-        assertThat(PerlPropertyLoader.getInstance().isUseSudo(), is(Boolean.TRUE));
-    }
 }

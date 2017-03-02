@@ -40,12 +40,6 @@ public class PerlPropertyLoader {
     @Getter
     private final String perlCommand;
 
-    @Getter
-    private final String sudoCommand;
-
-    @Getter
-    private final boolean useSudo;
-
     private final Properties properties;
 
     private PerlPropertyLoader() {
@@ -60,10 +54,6 @@ public class PerlPropertyLoader {
 
         // Get property, specify default value
         this.perlCommand = properties.getProperty("perl.command", "perl");
-        // Get property, specify default value
-        this.sudoCommand = properties.getProperty("perl.sudo.command", "/usr/bin/sudo");
-        // Get property, specify default value
-        this.useSudo = Boolean.parseBoolean(properties.getProperty("perl.use.sudo", "false"));
     }
 
     public static PerlPropertyLoader getInstance() {

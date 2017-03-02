@@ -92,7 +92,7 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     @Override
     public List<String> getNames() {
-        return Arrays.asList(ENGINE, "pearl", "Perl");
+        return Arrays.asList(ENGINE, "perl", "Perl");
     }
 
     @Override

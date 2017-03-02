@@ -23,26 +23,32 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-package testing.utils;
+package jsr223.perl.file.write;
 
-import java.lang.reflect.Field;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.FileAlreadyExistsException;
 
 
-/**
- * Created on 4/23/2015.
- */
-public class ReflectionUtilities {
-    /**
-     * Returns an accessible field from a class.
-     * @param propertyName Property/Field name of class.
-     * @param targetClass Class from which to acquire a field.
-     * @return A field which was made accessible.
-     * @throws NoSuchFieldException
-     */
-    public static Field makeFieldAccessible(String propertyName, Class<?> targetClass) throws NoSuchFieldException {
-        Field commandDefault;
-        commandDefault = targetClass.getDeclaredField(propertyName);
-        commandDefault.setAccessible(true);
-        return commandDefault;
+public class PerlScriptFileWriter {
+
+    public File forceFileToDisk(String fileContent, String filenameAndPath) throws IOException {
+        File perlScriptFile = new File(filenameAndPath);
+        // Create configuration file
+        if (!perlScriptFile.createNewFile()) {
+            perlScriptFile.delete();
+            if (!perlScriptFile.createNewFile()) {
+                throw new FileAlreadyExistsException("Perl script was deleted but still exists: " + filenameAndPath);
+            }
+        }
+
+        // Force configuration file to disk
+        Writer perlScriptFileWriter = new FileWriter(perlScriptFile);
+        perlScriptFileWriter.write(fileContent);
+        perlScriptFileWriter.close();
+
+        return perlScriptFile;
     }
 }

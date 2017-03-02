@@ -40,9 +40,8 @@ import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import jsr223.perl.bindings.PerlStringBindingsAdder;
-import jsr223.perl.file.write.PerlConfigurationFileWriter;
+import jsr223.perl.file.write.PerlScriptFileWriter;
 import jsr223.perl.utils.PerlLog4jConfigurationLoader;
-import jsr223.perl.variable.PerlVariablesReplacer;
 import lombok.extern.log4j.Log4j;
 import processbuilder.PerlSingletonPerlProcessBuilderFactory;
 import processbuilder.utils.PerlProcessBuilderUtilities;
@@ -57,9 +56,7 @@ public class PerlScriptEngine extends AbstractScriptEngine {
 
     private PerlProcessBuilderUtilities processBuilderUtilities = new PerlProcessBuilderUtilities();
 
-    private PerlVariablesReplacer perlVariablesReplacer = new PerlVariablesReplacer();
-
-    private PerlConfigurationFileWriter perlConfigurationFileWriter = new PerlConfigurationFileWriter();
+    private PerlScriptFileWriter perlScriptFileWriter = new PerlScriptFileWriter();
 
     private PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder();
 
@@ -88,17 +85,13 @@ public class PerlScriptEngine extends AbstractScriptEngine {
         // Add string bindings as environment variables
         perlStringBindingsAdder.addBindingToStringMap(context.getBindings(ScriptContext.ENGINE_SCOPE), variablesMap);
 
-        // Replace variables in configuration file
-        String scriptReplacedVariables = perlVariablesReplacer.replaceVariables(script, variablesMap);
-
         File perlFile = null;
-
+        Process process = null;
         try {
-            perlFile = perlConfigurationFileWriter.forceFileToDisk(scriptReplacedVariables,
-                                                                   perlCommandCreator.PERL_FILE_NAME);
+            perlFile = perlScriptFileWriter.forceFileToDisk(script, perlCommandCreator.PERL_FILE_NAME);
 
             // Start process
-            Process process = processBuilder.start();
+            process = processBuilder.start();
 
             // Attach streams
             processBuilderUtilities.attachStreamsToProcess(process,
@@ -121,9 +114,18 @@ public class PerlScriptEngine extends AbstractScriptEngine {
         } catch (IOException e) {
             log.warn("Failed to execute Perl.", e);
         } catch (InterruptedException e) {
-            log.info("Container execution interrupted. " + e.getMessage());
+            log.info("Perl script execution interrupted. " + e.getMessage());
+            if (process != null) {
+                process.destroy();
+            }
         } finally {
-
+            if (process != null) {
+                try {
+                    process.waitFor();
+                } catch (InterruptedException e) {
+                    log.info("Perl execution was not finished correctly after the interruption. " + e.getMessage());
+                }
+            }
             // Delete configuration file
             if (perlFile != null) {
                 boolean deleted = perlFile.delete();

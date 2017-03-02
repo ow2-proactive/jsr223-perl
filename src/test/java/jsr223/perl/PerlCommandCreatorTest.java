@@ -25,35 +25,15 @@
  */
 package jsr223.perl;
 
-import java.lang.reflect.Field;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import jsr223.perl.utils.PerlPropertyLoader;
-import testing.utils.ReflectionUtilities;
 
 
 public class PerlCommandCreatorTest {
 
     private final PerlCommandCreator perlCommandCreator = new PerlCommandCreator();
-
-    @Test
-    public void testPerlExecutionCommandWithSudo() throws NoSuchFieldException, IllegalAccessException {
-        Field useSudoField = ReflectionUtilities.makeFieldAccessible("useSudo", PerlPropertyLoader.class);
-        boolean oldValue = (boolean) useSudoField.get(PerlPropertyLoader.getInstance());
-
-        // Run test with sudo true
-        useSudoField.set(PerlPropertyLoader.getInstance(), true);
-        testPerlExecutionCommand();
-
-        // Run test with sudo false
-        useSudoField.set(PerlPropertyLoader.getInstance(), false);
-        testPerlExecutionCommand();
-
-        // Restore value from configuration file
-        useSudoField.set(PerlPropertyLoader.getInstance(), oldValue);
-    }
 
     /**
      * Check whether the execution command has the right structure.
@@ -66,27 +46,12 @@ public class PerlCommandCreatorTest {
         String[] command = perlCommandCreator.createPerlExecutionCommand();
         int index = 0;
 
-        // Check if sudo and compose command are added correctly
-        index = checkSudoAndComposeCommand(command, index);
-
-        // Check if correct filename is used
-        Assert.assertEquals("Correct filename must be used in command.",
-                            PerlCommandCreator.PERL_FILE_NAME,
-                            command[index++]);
-    }
-
-    private int checkSudoAndComposeCommand(String[] command, int index) {
-        // Check for sudo command
-        if (PerlPropertyLoader.getInstance().isUseSudo()) {
-            Assert.assertEquals("Sudo command must be used when configured.",
-                                PerlPropertyLoader.getInstance().getSudoCommand(),
-                                command[index++]);
-        }
-
-        // Check for perl command as next command
+        // Check if perl command are added correctly
         Assert.assertEquals("Perl command must be used as read from configuration.",
                             PerlPropertyLoader.getInstance().getPerlCommand(),
-                            command[index++]);
-        return index;
+                            command[0]);
+
+        // Check if correct filename is used
+        Assert.assertEquals("Correct filename must be used in command.", PerlCommandCreator.PERL_FILE_NAME, command[1]);
     }
 }

@@ -46,27 +46,13 @@ public class PerlCommandCreator {
      */
     public String[] createPerlExecutionCommand() {
         List<String> command = new ArrayList<>();
-        addSudoAndPerlCommand(command);
+
+        // Add perl command
+        command.add(PerlPropertyLoader.getInstance().getPerlCommand());
 
         // Add filename
         command.add(PERL_FILE_NAME);
 
         return command.toArray(new String[command.size()]);
-    }
-
-    /**
-     * Adds sudo and perl command to the given list. Sudo is only added when
-     * it is configured to do that.
-     *
-     * @param command List which gets the command(s) added.
-     */
-    private void addSudoAndPerlCommand(List<String> command) {
-        // Add sudo if necessary
-        if (PerlPropertyLoader.getInstance().isUseSudo()) {
-            command.add(PerlPropertyLoader.getInstance().getSudoCommand());
-        }
-
-        // Add perl command
-        command.add(PerlPropertyLoader.getInstance().getPerlCommand());
     }
 }

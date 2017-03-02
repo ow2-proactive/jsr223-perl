@@ -47,7 +47,9 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     private static final String ENGINE = NAME;
 
-    private static final String ENGINE_VERSION = perlVersionGetter.getPerlVersion(PerlSingletonPerlProcessBuilderFactory.getInstance());
+    private static final String PERL_VERSION = perlVersionGetter.getPerlVersion(PerlSingletonPerlProcessBuilderFactory.getInstance());
+
+    private static final String ENGINE_VERSION = PERL_VERSION.equals("") ? "0.1.0" : PERL_VERSION;
 
     private static final String LANGUAGE = "perl";
 
@@ -101,7 +103,7 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     @Override
     public String getLanguageVersion() {
-        return perlVersionGetter.getPerlVersion(PerlSingletonPerlProcessBuilderFactory.getInstance());
+        return PERL_VERSION;
     }
 
     @Override

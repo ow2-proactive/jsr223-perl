@@ -72,8 +72,15 @@ public class PerlScriptEngine extends AbstractScriptEngine {
     @Override
     public Object eval(String script, ScriptContext context) throws ScriptException {
 
+        File perlFile = null;
+        try {
+            perlFile = perlScriptFileWriter.forceFileToDisk(script);
+        } catch (IOException e) {
+            log.warn("Failed to write content to perl file.", e);
+        }
+
         // Create perl command
-        String[] perlCommand = perlCommandCreator.createPerlExecutionCommand();
+        String[] perlCommand = perlCommandCreator.createPerlExecutionCommand(perlFile);
 
         // Create a process builder
         ProcessBuilder processBuilder = PerlSingletonPerlProcessBuilderFactory.getInstance()
@@ -85,11 +92,8 @@ public class PerlScriptEngine extends AbstractScriptEngine {
         // Add string bindings as environment variables
         perlStringBindingsAdder.addBindingToStringMap(context.getBindings(ScriptContext.ENGINE_SCOPE), variablesMap);
 
-        File perlFile = null;
         Process process = null;
         try {
-            perlFile = perlScriptFileWriter.forceFileToDisk(script, perlCommandCreator.PERL_FILE_NAME);
-
             // Start process
             process = processBuilder.start();
 

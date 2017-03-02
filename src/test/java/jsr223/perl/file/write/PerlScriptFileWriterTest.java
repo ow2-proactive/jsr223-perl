@@ -46,7 +46,7 @@ public class PerlScriptFileWriterTest {
     public void testComposeFileIsWrittenToDisk() throws IOException {
         PerlScriptFileWriter perlScriptFileWriter = new PerlScriptFileWriter();
 
-        File fileOnDisk = perlScriptFileWriter.forceFileToDisk(fileContent, fileName);
+        File fileOnDisk = perlScriptFileWriter.forceFileToDisk(fileContent);
         fileOnDisk.deleteOnExit();
 
         assertThat(new File(fileOnDisk.getAbsolutePath()).exists(), is(true));
@@ -59,7 +59,7 @@ public class PerlScriptFileWriterTest {
 
         // Create file with same name -- must be overwritten
         new File(fileName).createNewFile();
-        File fileOnDisk = perlScriptFileWriter.forceFileToDisk(fileContent, fileName);
+        File fileOnDisk = perlScriptFileWriter.forceFileToDisk(fileContent);
         fileOnDisk.deleteOnExit();
 
         assertThat(new File(fileOnDisk.getAbsolutePath()).exists(), is(true));

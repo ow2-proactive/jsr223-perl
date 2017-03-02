@@ -25,18 +25,18 @@
  */
 package jsr223.perl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import jsr223.perl.utils.PerlPropertyLoader;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
 @NoArgsConstructor
+@Getter
 public class PerlCommandCreator {
-
-    // Constants
-    public static final String PERL_FILE_NAME = "file.pl";
 
     /**
      * This method creates a bash command which executes perl with a given perl file.
@@ -44,15 +44,16 @@ public class PerlCommandCreator {
      * @return A String array which contains the command as a separate @String and each
      * argument as a separate String.
      */
-    public String[] createPerlExecutionCommand() {
+    public String[] createPerlExecutionCommand(File perlFile) {
         List<String> command = new ArrayList<>();
 
         // Add perl command
         command.add(PerlPropertyLoader.getInstance().getPerlCommand());
 
         // Add filename
-        command.add(PERL_FILE_NAME);
+        command.add(perlFile.getPath());
 
         return command.toArray(new String[command.size()]);
     }
+
 }

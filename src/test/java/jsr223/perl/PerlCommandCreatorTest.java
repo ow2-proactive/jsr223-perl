@@ -25,6 +25,8 @@
  */
 package jsr223.perl;
 
+import java.io.File;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,7 +45,8 @@ public class PerlCommandCreatorTest {
      */
     @Test
     public void testPerlExecutionCommand() throws NoSuchFieldException, IllegalAccessException {
-        String[] command = perlCommandCreator.createPerlExecutionCommand();
+        File perlFile = new File("file.pl");
+        String[] command = perlCommandCreator.createPerlExecutionCommand(perlFile);
         int index = 0;
 
         // Check if perl command are added correctly
@@ -52,6 +55,6 @@ public class PerlCommandCreatorTest {
                             command[0]);
 
         // Check if correct filename is used
-        Assert.assertEquals("Correct filename must be used in command.", PerlCommandCreator.PERL_FILE_NAME, command[1]);
+        Assert.assertEquals("Correct filename must be used in command.", perlFile.getName(), command[1]);
     }
 }

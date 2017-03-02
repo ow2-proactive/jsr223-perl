@@ -29,26 +29,26 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.file.FileAlreadyExistsException;
 
 
 public class PerlScriptFileWriter {
 
-    public File forceFileToDisk(String fileContent, String filenameAndPath) throws IOException {
-        File perlScriptFile = new File(filenameAndPath);
-        // Create configuration file
-        if (!perlScriptFile.createNewFile()) {
-            perlScriptFile.delete();
-            if (!perlScriptFile.createNewFile()) {
-                throw new FileAlreadyExistsException("Perl script was deleted but still exists: " + filenameAndPath);
-            }
+    // Constants
+    public static final String PERL_FILE_EXTENSION = ".pl";
+
+    public File forceFileToDisk(String fileContent) throws IOException {
+        File perlTempFile = null;
+        try {
+            perlTempFile = File.createTempFile("jsr223-perl-", PERL_FILE_EXTENSION);
+        } catch (IOException e) {
+            throw new IOException("Unable to create perl temp file. " + e);
         }
 
-        // Force configuration file to disk
-        Writer perlScriptFileWriter = new FileWriter(perlScriptFile);
+        // Force perl script file to disk
+        Writer perlScriptFileWriter = new FileWriter(perlTempFile);
         perlScriptFileWriter.write(fileContent);
         perlScriptFileWriter.close();
 
-        return perlScriptFile;
+        return perlTempFile;
     }
 }

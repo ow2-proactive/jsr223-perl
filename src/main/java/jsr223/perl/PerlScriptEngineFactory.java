@@ -36,21 +36,20 @@ import processbuilder.utils.PerlProcessBuilderUtilities;
 
 
 public class PerlScriptEngineFactory implements ScriptEngineFactory {
+    private final Map<String, Object> parameters = new HashMap<>();
+
+    private static PerlProcessBuilderUtilities processBuilderUtilities = new PerlProcessBuilderUtilities();
+
+    private static PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilities);
 
     // Script engine parameters
     private static final String NAME = "perl";
 
     private static final String ENGINE = NAME;
 
-    private static final String ENGINE_VERSION = "0.1.0";
+    private static final String ENGINE_VERSION = perlVersionGetter.getPerlVersion(PerlSingletonPerlProcessBuilderFactory.getInstance());
 
     private static final String LANGUAGE = "perl";
-
-    private final Map<String, Object> parameters = new HashMap<>();
-
-    private static PerlProcessBuilderUtilities processBuilderUtilities = new PerlProcessBuilderUtilities();
-
-    private static PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilities);
 
     public PerlScriptEngineFactory() {
         parameters.put(ScriptEngine.NAME, NAME);
@@ -112,17 +111,21 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     @Override
     public String getMethodCallSyntax(String obj, String m, String... args) {
-        return null;
+        String methodCall = m + " ";
+        for (String arg : args) {
+            methodCall += arg + " ";
+        }
+        return methodCall;
     }
 
     @Override
     public String getOutputStatement(String toDisplay) {
-        return null;
+        return toDisplay;
     }
 
     @Override
     public String getProgram(String... statements) {
-        return null;
+        return statements[0];
     }
 
     @Override

@@ -70,6 +70,12 @@ public class PerlScriptEngineFactoryTest {
     }
 
     @Test
+    public void testThatDefaultEngineVersionIsReturned() {
+        PerlScriptEngineFactory perlScriptEngineFactory = new PerlScriptEngineFactory();
+        assertThat(perlScriptEngineFactory.getEngineVersion(), is("0.1.0"));
+    }
+
+    @Test
     public void testThatPerlScriptEngineFactoryReturnsScriptEngine() {
         PerlScriptEngineFactory perlScriptEngineFactory = new PerlScriptEngineFactory(new PerlProcessBuilderUtilities(),
                                                                                       new PerlVersionGetter(new PerlProcessBuilderUtilities()));

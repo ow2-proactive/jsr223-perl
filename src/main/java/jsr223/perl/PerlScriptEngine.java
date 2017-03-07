@@ -116,7 +116,7 @@ public class PerlScriptEngine extends AbstractScriptEngine {
             }
             return exitValue;
         } catch (IOException e) {
-            log.warn("Failed to execute Perl.", e);
+            throw new ScriptException("Check if perl is installed properly. Failed to execute Perl with exception: " + e);
         } catch (InterruptedException e) {
             log.info("Perl script execution interrupted. " + e.getMessage());
             if (process != null) {

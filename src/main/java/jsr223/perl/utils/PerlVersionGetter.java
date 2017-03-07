@@ -71,7 +71,7 @@ public class PerlVersionGetter {
             // Extract output
             result = commandOutput.toString();
         } catch (IOException | InterruptedException | IndexOutOfBoundsException e) {
-            log.debug("Failed to retrieve perl compose version.", e);
+            log.warn("Failed to retrieve perl version.", e);
         }
         return result;
     }

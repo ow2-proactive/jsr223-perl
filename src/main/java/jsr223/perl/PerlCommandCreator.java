@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PerlCommandCreator {
 
-    private static final String PERL_COMMAND = "";
+    private static final String PERL_COMMAND = "perl";
 
     /**
      * This method creates a bash command which executes perl with a given perl file.

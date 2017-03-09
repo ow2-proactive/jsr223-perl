@@ -57,7 +57,7 @@ public class PerlCommandCreator {
         return command.toArray(new String[command.size()]);
     }
 
-    public static String getPerlCommand(){
+    public static String getPerlCommand() {
         return PERL_COMMAND;
     }
 

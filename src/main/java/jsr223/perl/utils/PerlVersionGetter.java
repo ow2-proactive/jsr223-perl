@@ -56,8 +56,7 @@ public class PerlVersionGetter {
 
         String result = ""; // Empty string for empty result if version recovery fails
 
-        ProcessBuilder processBuilder = factory.getProcessBuilder(PerlCommandCreator.getPerlCommand(),
-                                                                  "-v");
+        ProcessBuilder processBuilder = factory.getProcessBuilder(PerlCommandCreator.getPerlCommand(), "-v");
 
         try {
             Process process = processBuilder.start();

@@ -41,7 +41,7 @@ import javax.script.SimpleBindings;
 
 import jsr223.perl.bindings.PerlStringBindingsAdder;
 import jsr223.perl.file.write.PerlScriptFileWriter;
-import jsr223.perl.utils.Log4jConfigurationLoader;
+import jsr223.perl.utils.PerlLog4jConfigurationLoader;
 import lombok.extern.log4j.Log4j;
 import processbuilder.PerlSingletonPerlProcessBuilderFactory;
 import processbuilder.utils.PerlProcessBuilderUtilities;
@@ -62,11 +62,11 @@ public class PerlScriptEngine extends AbstractScriptEngine {
 
     private PerlCommandCreator perlCommandCreator = new PerlCommandCreator();
 
-    private Log4jConfigurationLoader log4JConfigurationLoader = new Log4jConfigurationLoader();
+    private PerlLog4jConfigurationLoader perlLog4JConfigurationLoader = new PerlLog4jConfigurationLoader();
 
     public PerlScriptEngine() {
         // This is the entry-point of the script engine
-        log4JConfigurationLoader.loadLog4jConfiguration();
+        perlLog4JConfigurationLoader.loadLog4jConfiguration();
     }
 
     @Override

@@ -32,13 +32,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class Log4jConfigurationLoaderTest {
+public class PerlLog4JConfigurationLoaderTest {
     @Spy
-    Log4jConfigurationLoader log4JConfigurationLoader;
+    PerlLog4jConfigurationLoader perlLog4JConfigurationLoader;
 
     @Test
     public void loadLog4jConfigurationDOesntThrowExceptionIfFileIfFileIsNotPresent() throws Exception {
-        log4JConfigurationLoader.loadLog4jConfiguration();
+        perlLog4JConfigurationLoader.loadLog4jConfiguration();
     }
 
 }

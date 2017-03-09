@@ -25,7 +25,7 @@
  */
 package jsr223.perl.utils;
 
-public class PerlLog4jConfigurationLoader {
+public class Log4jConfigurationLoader {
 
     private static final String LOG4J_CONFIGURATION_FILE = "config/log/scriptengines.properties";
 

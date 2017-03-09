@@ -29,7 +29,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import jsr223.perl.utils.PerlPropertyLoader;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +36,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class PerlCommandCreator {
+
+    private static final String PERL_COMMAND = "";
 
     /**
      * This method creates a bash command which executes perl with a given perl file.
@@ -48,12 +49,16 @@ public class PerlCommandCreator {
         List<String> command = new ArrayList<>();
 
         // Add perl command
-        command.add(PerlPropertyLoader.getInstance().getPerlCommand());
+        command.add(PERL_COMMAND);
 
         // Add filename
         command.add(perlFile.getPath());
 
         return command.toArray(new String[command.size()]);
+    }
+
+    public static String getPerlCommand(){
+        return PERL_COMMAND;
     }
 
 }

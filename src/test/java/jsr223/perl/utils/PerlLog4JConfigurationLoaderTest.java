@@ -32,7 +32,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class Log4jConfigurationLoaderTest {
+public class PerlLog4JConfigurationLoaderTest {
     @Spy
     PerlLog4jConfigurationLoader perlLog4JConfigurationLoader;
 

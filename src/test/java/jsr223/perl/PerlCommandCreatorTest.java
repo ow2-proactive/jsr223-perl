@@ -30,8 +30,6 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 
-import jsr223.perl.utils.PerlPropertyLoader;
-
 
 public class PerlCommandCreatorTest {
 
@@ -51,7 +49,7 @@ public class PerlCommandCreatorTest {
 
         // Check if perl command are added correctly
         Assert.assertEquals("Perl command must be used as read from configuration.",
-                            PerlPropertyLoader.getInstance().getPerlCommand(),
+                            PerlCommandCreator.getPerlCommand(),
                             command[0]);
 
         // Check if correct filename is used

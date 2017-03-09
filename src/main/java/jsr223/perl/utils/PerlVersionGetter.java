@@ -28,6 +28,7 @@ package jsr223.perl.utils;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import jsr223.perl.PerlCommandCreator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -55,8 +56,7 @@ public class PerlVersionGetter {
 
         String result = ""; // Empty string for empty result if version recovery fails
 
-        ProcessBuilder processBuilder = factory.getProcessBuilder(PerlPropertyLoader.getInstance().getPerlCommand(),
-                                                                  "-v");
+        ProcessBuilder processBuilder = factory.getProcessBuilder(PerlCommandCreator.getPerlCommand(), "-v");
 
         try {
             Process process = processBuilder.start();

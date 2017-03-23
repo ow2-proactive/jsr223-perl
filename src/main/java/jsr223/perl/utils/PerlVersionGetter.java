@@ -82,6 +82,14 @@ public class PerlVersionGetter {
             // Extract output
             result = commandOutput.toString();
         } catch (Exception e) {
+            // The exception is ignored as in case of any error the PERL_VERSION_IF_NOT_INSTALLED string should be return as result
+            // The error is not logged because of the case when the perl is not installed on machine.
+            // In this case the logging error will be included in an output of any task executing in scheduler, because this method is used by PerlScriptEngineFactory.
+            // And via PerlScriptEngineFactory the getPerlVersion() is used indirectly for every starting task
+        } finally {
+            if (perlFile != null) {
+                perlFile.delete();
+            }
         }
         return result;
     }

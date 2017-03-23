@@ -27,46 +27,38 @@ package jsr223.perl;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
+
+import com.google.common.collect.ImmutableMap;
 
 import jsr223.perl.utils.PerlVersionGetter;
 
 
 public class PerlScriptEngineFactory implements ScriptEngineFactory {
-    private static final Map<String, Object> parameters = new HashMap();
+    static final ImmutableMap<String, Object> PARAMETERS;
 
-    // Script engine parameters
-    private static final String NAME = "perl";
-
-    private static final String ENGINE = NAME;
-
-    private static final String PERL_ENGINE_VERSION = new PerlVersionGetter().getPerlVersion();
-
-    private static final String LANGUAGE = "perl";
-
-    private static final String LANGUAGE_VERSION = PERL_ENGINE_VERSION;
-
+    // Script engine PARAMETERS
     static {
-        parameters.put(ScriptEngine.NAME, NAME);
-        parameters.put(ScriptEngine.ENGINE, ENGINE);
-        parameters.put(ScriptEngine.ENGINE_VERSION, PERL_ENGINE_VERSION);
-        parameters.put(ScriptEngine.LANGUAGE, LANGUAGE);
-        parameters.put(ScriptEngine.LANGUAGE_VERSION, LANGUAGE_VERSION);
+        String perlEngineVersion = new PerlVersionGetter().getPerlVersion();
+        PARAMETERS = new ImmutableMap.Builder<String, Object>().put(ScriptEngine.NAME, "perl")
+                                                               .put(ScriptEngine.ENGINE, "perl")
+                                                               .put(ScriptEngine.ENGINE_VERSION, perlEngineVersion)
+                                                               .put(ScriptEngine.LANGUAGE, "perl")
+                                                               .put(ScriptEngine.LANGUAGE_VERSION, perlEngineVersion)
+                                                               .build();
     }
 
     @Override
     public String getEngineName() {
-        return (String) parameters.get(ScriptEngine.NAME);
+        return (String) PARAMETERS.get(ScriptEngine.NAME);
     }
 
     @Override
     public String getEngineVersion() {
-        return (String) parameters.get(ScriptEngine.ENGINE_VERSION);
+        return (String) PARAMETERS.get(ScriptEngine.ENGINE_VERSION);
     }
 
     @Override
@@ -81,22 +73,22 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     @Override
     public List<String> getNames() {
-        return Arrays.asList(ENGINE, "perl", "Perl");
+        return Arrays.asList((String) PARAMETERS.get(ScriptEngine.ENGINE), "perl", "Perl");
     }
 
     @Override
     public String getLanguageName() {
-        return (String) parameters.get(ScriptEngine.LANGUAGE);
+        return (String) PARAMETERS.get(ScriptEngine.LANGUAGE);
     }
 
     @Override
     public String getLanguageVersion() {
-        return (String) parameters.get(ScriptEngine.LANGUAGE_VERSION);
+        return (String) PARAMETERS.get(ScriptEngine.LANGUAGE_VERSION);
     }
 
     @Override
     public Object getParameter(String key) {
-        return parameters.get(key);
+        return PARAMETERS.get(key);
     }
 
     @Override

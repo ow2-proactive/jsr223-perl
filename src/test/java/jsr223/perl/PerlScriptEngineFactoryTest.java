@@ -29,7 +29,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 import javax.script.ScriptEngine;
 
@@ -37,12 +36,12 @@ import org.junit.Test;
 
 
 public class PerlScriptEngineFactoryTest {
-    PerlScriptEngineFactory perlScriptEngineFactory = new PerlScriptEngineFactory();
+    private PerlScriptEngineFactory perlScriptEngineFactory = new PerlScriptEngineFactory();
 
     @Test
-    public void testThatPerlVersionGetterIsUsed() {
-        String version = perlScriptEngineFactory.getLanguageVersion();
-        assertThat(version, notNullValue());
+    public void testGetLanguageVersion() {
+        assertThat(perlScriptEngineFactory.getLanguageVersion(),
+                   is(perlScriptEngineFactory.PARAMETERS.get(ScriptEngine.LANGUAGE_VERSION)));
     }
 
     @Test
@@ -51,28 +50,33 @@ public class PerlScriptEngineFactoryTest {
     }
 
     @Test
-    public void testThatPerlScriptEngineFactoryReturnsNonNullParameterName() {
-        assertThat(perlScriptEngineFactory.getParameter(ScriptEngine.NAME), is(notNullValue()));
+    public void testThatPerlScriptEngineFactoryReturnsParameterName() {
+        assertThat(perlScriptEngineFactory.getParameter(ScriptEngine.NAME),
+                   is(perlScriptEngineFactory.PARAMETERS.get(ScriptEngine.NAME)));
     }
 
     @Test
-    public void testThatPerlScriptEngineFactoryReturnsNonNullParameterEngineVersion() {
-        assertThat(perlScriptEngineFactory.getParameter(ScriptEngine.ENGINE_VERSION), is(notNullValue()));
+    public void testThatPerlScriptEngineFactoryReturnsParameterEngineVersion() {
+        assertThat(perlScriptEngineFactory.getParameter(ScriptEngine.ENGINE_VERSION),
+                   is(perlScriptEngineFactory.PARAMETERS.get(ScriptEngine.ENGINE_VERSION)));
     }
 
     @Test
-    public void testThatPerlScriptEngineFactoryReturnsNonNullParameterLanguage() {
-        assertThat(perlScriptEngineFactory.getParameter(ScriptEngine.LANGUAGE), is(notNullValue()));
+    public void testThatPerlScriptEngineFactoryReturnsParameterLanguage() {
+        assertThat(perlScriptEngineFactory.getParameter(ScriptEngine.LANGUAGE),
+                   is(perlScriptEngineFactory.PARAMETERS.get(ScriptEngine.LANGUAGE)));
     }
 
     @Test
-    public void testThatPerlScriptEngineFactoryReturnsNonNullParameterEngine() {
-        assertThat(perlScriptEngineFactory.getParameter(ScriptEngine.ENGINE), is(notNullValue()));
+    public void testThatPerlScriptEngineFactoryReturnsParameterEngine() {
+        assertThat(perlScriptEngineFactory.getParameter(ScriptEngine.ENGINE),
+                   is(perlScriptEngineFactory.PARAMETERS.get(ScriptEngine.ENGINE)));
     }
 
     @Test
     public void testThatPerlScriptEngineFactoryReturnsNonNullLanguageName() {
-        assertThat(perlScriptEngineFactory.getEngineName(), is(notNullValue()));
+        assertThat(perlScriptEngineFactory.getEngineName(),
+                   is(perlScriptEngineFactory.PARAMETERS.get(ScriptEngine.ENGINE)));
     }
 
     @Test
@@ -92,11 +96,13 @@ public class PerlScriptEngineFactoryTest {
 
     @Test
     public void testThatPerlScriptEngineFactoryEngineVersionIsNonNull() {
-        assertThat(perlScriptEngineFactory.getEngineVersion(), is(notNullValue()));
+        assertThat(perlScriptEngineFactory.getEngineVersion(),
+                   is(perlScriptEngineFactory.PARAMETERS.get(ScriptEngine.ENGINE_VERSION)));
     }
 
     @Test
     public void testThatPerlScriptEngineFactoryLanguageIsNonNull() {
-        assertThat(perlScriptEngineFactory.getLanguageName(), is(notNullValue()));
+        assertThat(perlScriptEngineFactory.getLanguageName(),
+                   is(perlScriptEngineFactory.PARAMETERS.get(ScriptEngine.LANGUAGE)));
     }
 }

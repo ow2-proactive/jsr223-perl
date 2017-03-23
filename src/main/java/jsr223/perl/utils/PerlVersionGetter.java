@@ -25,44 +25,55 @@
  */
 package jsr223.perl.utils;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.StringWriter;
 
 import jsr223.perl.PerlCommandCreator;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import jsr223.perl.file.write.PerlScriptFileWriter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import processbuilder.PerlProcessBuilderFactory;
+import processbuilder.PerlSingletonPerlProcessBuilderFactory;
 import processbuilder.utils.PerlProcessBuilderUtilities;
 
 
 @Log4j
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class PerlVersionGetter {
 
-    @NonNull
-    private PerlProcessBuilderUtilities processBuilderUtilities;
+    public static final String PERL_VERSION_IF_NOT_INSTALLED = "Could not determine version";
+
+    private static final String PERL_VERSION_COMMAND = "print $];"; // this command is needed to retrieve only specific string with perl version
+
+    private PerlProcessBuilderUtilities processBuilderUtilities = new PerlProcessBuilderUtilities();;
+
+    private PerlProcessBuilderFactory factory = PerlSingletonPerlProcessBuilderFactory.getInstance();
 
     /**
      * Retrieves the Perl version.
      *
-     * @return The currently installed version return by the perl command or an empty string
+     * @return The currently installed version return by the perl command or an string that
      * the version could not be determined.
      */
-    public String getPerlVersion(PerlProcessBuilderFactory factory) {
-        if (factory == null) {
-            return "";
-        }
+    public String getPerlVersion() {
+        String result = PERL_VERSION_IF_NOT_INSTALLED; // Default error string for result if version recovery fails
 
-        String result = ""; // Empty string for empty result if version recovery fails
-
-        ProcessBuilder processBuilder = factory.getProcessBuilder(PerlCommandCreator.getPerlCommand(), "-v");
-
+        PerlCommandCreator perlCommandCreator = new PerlCommandCreator();
+        PerlScriptFileWriter perlScriptFileWriter = new PerlScriptFileWriter();
+        File perlFile = null;
         try {
+            perlFile = perlScriptFileWriter.forceFileToDisk(PERL_VERSION_COMMAND);
+
+            String[] perlCommand = perlCommandCreator.createPerlExecutionCommand(perlFile);
+
+            ProcessBuilder processBuilder = factory.getProcessBuilder(perlCommand);
             Process process = processBuilder.start();
 
             // Attach stream to std output of process
             StringWriter commandOutput = new StringWriter();
+
             processBuilderUtilities.attachStreamsToProcess(process, commandOutput, null, null);
 
             // Wait for process to exit
@@ -70,8 +81,7 @@ public class PerlVersionGetter {
 
             // Extract output
             result = commandOutput.toString();
-        } catch (IOException | InterruptedException | IndexOutOfBoundsException e) {
-            log.warn("Failed to retrieve perl version.", e);
+        } catch (Exception e) {
         }
         return result;
     }

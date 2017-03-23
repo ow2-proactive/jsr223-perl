@@ -25,50 +25,38 @@
  */
 package jsr223.perl;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
 import jsr223.perl.utils.PerlVersionGetter;
-import processbuilder.PerlSingletonPerlProcessBuilderFactory;
-import processbuilder.utils.PerlProcessBuilderUtilities;
 
 
 public class PerlScriptEngineFactory implements ScriptEngineFactory {
-    private final Map<String, Object> parameters = new HashMap<>();
-
-    private static PerlProcessBuilderUtilities processBuilderUtilities = new PerlProcessBuilderUtilities();
-
-    private static PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilities);
+    private static final Map<String, Object> parameters = new HashMap();
 
     // Script engine parameters
     private static final String NAME = "perl";
 
     private static final String ENGINE = NAME;
 
-    private static final String PERL_VERSION = perlVersionGetter.getPerlVersion(PerlSingletonPerlProcessBuilderFactory.getInstance());
-
-    private static final String ENGINE_VERSION = (PERL_VERSION.equals("") ? "0.1.0" : PERL_VERSION);
+    private static final String PERL_ENGINE_VERSION = new PerlVersionGetter().getPerlVersion();
 
     private static final String LANGUAGE = "perl";
 
-    public PerlScriptEngineFactory() {
+    private static final String LANGUAGE_VERSION = PERL_ENGINE_VERSION;
+
+    static {
         parameters.put(ScriptEngine.NAME, NAME);
-        parameters.put(ScriptEngine.ENGINE_VERSION, ENGINE_VERSION);
-        parameters.put(ScriptEngine.LANGUAGE, LANGUAGE);
         parameters.put(ScriptEngine.ENGINE, ENGINE);
-    }
-
-    public PerlScriptEngineFactory(PerlProcessBuilderUtilities processBuilderUtilities,
-            PerlVersionGetter perlVersionGetter) {
-        this();
-        if (processBuilderUtilities == null || perlVersionGetter == null) {
-            throw new NullPointerException("processBuilderUtilities and perlVersionGetter must not be null");
-        }
-        this.processBuilderUtilities = processBuilderUtilities;
-        this.perlVersionGetter = perlVersionGetter;
-
+        parameters.put(ScriptEngine.ENGINE_VERSION, PERL_ENGINE_VERSION);
+        parameters.put(ScriptEngine.LANGUAGE, LANGUAGE);
+        parameters.put(ScriptEngine.LANGUAGE_VERSION, LANGUAGE_VERSION);
     }
 
     @Override
@@ -103,7 +91,7 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     @Override
     public String getLanguageVersion() {
-        return perlVersionGetter.getPerlVersion(PerlSingletonPerlProcessBuilderFactory.getInstance());
+        return (String) parameters.get(ScriptEngine.LANGUAGE_VERSION);
     }
 
     @Override

@@ -69,6 +69,7 @@ dependencies {
         exclude module: 'hamcrest-core'
     }
     testCompile 'org.mockito:mockito-all:1.10.19'
+    testCompile 'org.powermock:powermock-mockito-release-full:1.6.2'
 }
 
 // Must be called after dependencies

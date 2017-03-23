@@ -25,60 +25,40 @@
  */
 package jsr223.perl;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
+import com.google.common.collect.ImmutableMap;
+
 import jsr223.perl.utils.PerlVersionGetter;
-import processbuilder.PerlSingletonPerlProcessBuilderFactory;
-import processbuilder.utils.PerlProcessBuilderUtilities;
 
 
 public class PerlScriptEngineFactory implements ScriptEngineFactory {
-    private final Map<String, Object> parameters = new HashMap<>();
+    static final ImmutableMap<String, Object> PARAMETERS;
 
-    private static PerlProcessBuilderUtilities processBuilderUtilities = new PerlProcessBuilderUtilities();
-
-    private static PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilities);
-
-    // Script engine parameters
-    private static final String NAME = "perl";
-
-    private static final String ENGINE = NAME;
-
-    private static final String PERL_VERSION = perlVersionGetter.getPerlVersion(PerlSingletonPerlProcessBuilderFactory.getInstance());
-
-    private static final String ENGINE_VERSION = (PERL_VERSION.equals("") ? "0.1.0" : PERL_VERSION);
-
-    private static final String LANGUAGE = "perl";
-
-    public PerlScriptEngineFactory() {
-        parameters.put(ScriptEngine.NAME, NAME);
-        parameters.put(ScriptEngine.ENGINE_VERSION, ENGINE_VERSION);
-        parameters.put(ScriptEngine.LANGUAGE, LANGUAGE);
-        parameters.put(ScriptEngine.ENGINE, ENGINE);
-    }
-
-    public PerlScriptEngineFactory(PerlProcessBuilderUtilities processBuilderUtilities,
-            PerlVersionGetter perlVersionGetter) {
-        this();
-        if (processBuilderUtilities == null || perlVersionGetter == null) {
-            throw new NullPointerException("processBuilderUtilities and perlVersionGetter must not be null");
-        }
-        this.processBuilderUtilities = processBuilderUtilities;
-        this.perlVersionGetter = perlVersionGetter;
-
+    // Script engine PARAMETERS
+    static {
+        String perlEngineVersion = new PerlVersionGetter().getPerlVersion();
+        PARAMETERS = new ImmutableMap.Builder<String, Object>().put(ScriptEngine.NAME, "perl")
+                                                               .put(ScriptEngine.ENGINE, "perl")
+                                                               .put(ScriptEngine.ENGINE_VERSION, perlEngineVersion)
+                                                               .put(ScriptEngine.LANGUAGE, "perl")
+                                                               .put(ScriptEngine.LANGUAGE_VERSION, perlEngineVersion)
+                                                               .build();
     }
 
     @Override
     public String getEngineName() {
-        return (String) parameters.get(ScriptEngine.NAME);
+        return (String) PARAMETERS.get(ScriptEngine.NAME);
     }
 
     @Override
     public String getEngineVersion() {
-        return (String) parameters.get(ScriptEngine.ENGINE_VERSION);
+        return (String) PARAMETERS.get(ScriptEngine.ENGINE_VERSION);
     }
 
     @Override
@@ -93,22 +73,22 @@ public class PerlScriptEngineFactory implements ScriptEngineFactory {
 
     @Override
     public List<String> getNames() {
-        return Arrays.asList(ENGINE, "perl", "Perl");
+        return Arrays.asList((String) PARAMETERS.get(ScriptEngine.ENGINE), "perl", "Perl");
     }
 
     @Override
     public String getLanguageName() {
-        return (String) parameters.get(ScriptEngine.LANGUAGE);
+        return (String) PARAMETERS.get(ScriptEngine.LANGUAGE);
     }
 
     @Override
     public String getLanguageVersion() {
-        return perlVersionGetter.getPerlVersion(PerlSingletonPerlProcessBuilderFactory.getInstance());
+        return (String) PARAMETERS.get(ScriptEngine.LANGUAGE_VERSION);
     }
 
     @Override
     public Object getParameter(String key) {
-        return parameters.get(key);
+        return PARAMETERS.get(key);
     }
 
     @Override

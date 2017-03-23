@@ -27,6 +27,7 @@ package jsr223.perl.utils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -47,28 +48,36 @@ import processbuilder.utils.PerlProcessBuilderUtilities;
 public class PerlVersionGetterTest {
 
     @Test
-    public void getPerlVersionCallsProcessBuilderFactory() throws Exception {
+    public void getPerlVersionCallsProcessBuilderFactory() {
         PerlProcessBuilderFactory factory = mock(PerlProcessBuilderFactory.class);
         PerlProcessBuilderUtilities processBuilderUtilitiesMock = spy(PerlProcessBuilderUtilities.class);
 
         when(factory.getProcessBuilder(Matchers.<String[]> anyVararg())).thenReturn(new ProcessBuilder(""));
 
-        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilitiesMock);
-        perlVersionGetter.getPerlVersion(factory);
+        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilitiesMock, factory);
+        perlVersionGetter.getPerlVersion();
 
         verify(factory).getProcessBuilder(Matchers.<String[]> anyVararg());
     }
 
     @Test
-    public void getPerlVersionInvalidCommandReturnsEmptyString() throws Exception {
+    public void getPerlVersionForCommandBuilder() {
+        PerlVersionGetter perlVersionGetter = new PerlVersionGetter();
+        String result = perlVersionGetter.getPerlVersion();
+
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void getPerlVersionInvalidCommandReturnsDefaultString() throws Exception {
         PerlProcessBuilderFactory factory = mock(PerlProcessBuilderFactory.class);
         PerlProcessBuilderUtilities processBuilderUtilitiesMock = spy(PerlProcessBuilderUtilities.class);
 
         when(factory.getProcessBuilder(Matchers.<String[]> anyVararg())).thenReturn(new ProcessBuilder("...."));
 
-        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilitiesMock);
+        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilitiesMock, factory);
 
-        assertThat(perlVersionGetter.getPerlVersion(factory), is(""));
+        assertThat(perlVersionGetter.getPerlVersion(), is(PerlVersionGetter.PERL_VERSION_IF_NOT_INSTALLED));
     }
 
     @Test
@@ -82,9 +91,9 @@ public class PerlVersionGetterTest {
                                                                                                            "/C",
                                                                                                            "dir"));
 
-        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilitiesMock);
+        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilitiesMock, factoryMock);
 
-        perlVersionGetter.getPerlVersion(factoryMock);
+        perlVersionGetter.getPerlVersion();
 
         verify(processBuilderUtilitiesMock).attachStreamsToProcess(any(Process.class),
                                                                    any(Writer.class),
@@ -101,8 +110,8 @@ public class PerlVersionGetterTest {
 
         when(factoryMock.getProcessBuilder(Matchers.<String[]> anyVararg())).thenReturn(new ProcessBuilder("ls"));
 
-        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilitiesMock);
-        perlVersionGetter.getPerlVersion(factoryMock);
+        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(processBuilderUtilitiesMock, factoryMock);
+        perlVersionGetter.getPerlVersion();
 
         verify(processBuilderUtilitiesMock).attachStreamsToProcess(any(Process.class),
                                                                    any(Writer.class),
@@ -111,9 +120,9 @@ public class PerlVersionGetterTest {
     }
 
     @Test
-    public void getPerlVersionNullFactoryReturnsEmptyString() throws Exception {
-        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(new PerlProcessBuilderUtilities());
+    public void getPerlVersionNullFactoryReturnsDefaultErrorString() throws Exception {
+        PerlVersionGetter perlVersionGetter = new PerlVersionGetter(new PerlProcessBuilderUtilities(), null);
 
-        assertThat(perlVersionGetter.getPerlVersion(null), is(""));
+        assertThat(perlVersionGetter.getPerlVersion(), is(PerlVersionGetter.PERL_VERSION_IF_NOT_INSTALLED));
     }
 }

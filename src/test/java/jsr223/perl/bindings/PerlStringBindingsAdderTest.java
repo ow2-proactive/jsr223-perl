@@ -43,17 +43,6 @@ import org.junit.Test;
 public class PerlStringBindingsAdderTest {
 
     @Test
-    public void testStringStringMapsAsVariables() throws ScriptException, IOException {
-        Bindings bindings = new SimpleBindings();
-        Map<String, String> variables = new HashMap<>();
-        variables.put("name", "EchoUbuntu");
-        variables.put("key", "value");
-        variables.put("greetings", "Hello World");
-        bindings.put("variables", variables);
-
-    }
-
-    @Test
     public void testAddStringVariables() throws ScriptException, IOException {
         PerlStringBindingsAdder perlStringBindingsAdder = new PerlStringBindingsAdder();
 
